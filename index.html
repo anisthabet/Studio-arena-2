@@ -1,3 +1,20 @@
+I have carefully reviewed your full HTML code. You pasted Version 7, which does not have the Live section.
+
+I have combined your exact Version 7 code with the new Live Broadcast Control tab. This new version allows you to control the live graphics (scores, tickers, breaking news) directly from your mobile phone or PC while OBS captures the screen.
+
+Here is how to apply it:
+
+How to update your file (Mobile):
+
+1. Go to your GitHub repository: https://github.com/anisthabet/Studio-arena-2
+2. Tap on index.html and tap the Pencil icon (Edit).
+3. Delete everything in the file.
+4. Copy and paste the entire code below.
+5. Tap Commit changes.
+
+Here is the complete, corrected Version 8 code:
+
+```html
 <!doctype html>
 <html lang="en">
 <head>
@@ -69,6 +86,13 @@ input[type=range]{width:100%;accent-color:var(--r)}
 <h2>3. INTRO, CLOSER AND LABEL</h2>
 <label><input type="checkbox" id="vin" checked style="width:auto;margin-right:8px">Logo intro at the start</label><br>
 <label><input type="checkbox" id="vout" checked style="width:auto;margin-right:8px">Closer at the end</label>
+<label style="margin-top:8px">NEWS SLIDES: SECONDS BEFORE THE TEXT APPEARS (the picture shows first)</label>
+<input type="number" id="vdelay" value="1" min="0" max="5" step="0.5" style="width:100%;box-sizing:border-box;background:var(--s);color:var(--w);border:1px solid #3a3b42;border-radius:8px;padding:10px;font:inherit;font-size:15px;margin:4px 0 10px">
+<label style="margin-top:8px">MONTAGE: SECONDS THE TEXT SHOWS BEFORE THE PICTURE OR VIDEO STARTS</label>
+<input type="number" id="vmdelay" value="1.5" min="0" max="5" step="0.5" style="width:100%;box-sizing:border-box;background:var(--s);color:var(--w);border:1px solid #3a3b42;border-radius:8px;padding:10px;font:inherit;font-size:15px;margin:4px 0 10px">
+<label style="margin-top:8px"><input type="checkbox" id="vmagic" checked style="width:auto;margin-right:8px">Magic effects in montage (sparkles, light, glow)</label>
+<label style="margin-top:8px">TRANSITION STYLE (montage)</label>
+<select id="vtr" style="width:100%;box-sizing:border-box;background:var(--s);color:var(--w);border:1px solid #3a3b42;border-radius:8px;padding:12px;font:inherit;font-size:15px;margin:4px 0 10px"><option>Mix</option><option>Red wipe</option><option>Flash</option><option>Iris circle</option><option>Bars</option><option>Glitch</option></select>
 <label style="margin-top:8px">CLOSER WORD (FOLLOW, SUBSCRIBE...)</label>
 <input type="text" id="vcl" style="width:100%;box-sizing:border-box;background:var(--s);color:var(--w);border:1px solid #3a3b42;border-radius:8px;padding:10px;font:inherit;font-size:15px;margin:4px 0 10px">
 <label>RED TAG ABOVE THE TEXT (instead of PULSE NEWS)</label>
@@ -152,59 +176,6 @@ input[type=range]{width:100%;accent-color:var(--r)}
 </section>
 <!-- END NEW LIVE SECTION -->
 
-<script>
-var K='#0B0B0D',R='#E53935',W='#fff',G='#A7A7A7',S='#24252B';
-var C=document.getElementById('c'),PX=C.getContext('2d'),X=PX,VC=document.getElementById('vc'),VX=VC.getContext('2d');
-function F(s,w){X.font=(w||800)+' '+s+'px Poppins,sans-serif'}
-function T(t,x,y,s,c,a,mw,w){F(s,w);if(mw)while(X.measureText(t).width>mw&&s>16){s-=2;F(s,w)}X.fillStyle=c;X.textAlign=a||'left';X.textBaseline='middle';X.fillText(t,x,y)}
-function Q(x,y,w,h,c){X.fillStyle=c;X.fillRect(x,y,w,h)}
-function wrap(t,s,mw,w){F(s,w);var L=[],l='';t.split(' ').forEach(function(d){var n=l?l+' '+d:d;if(X.measureText(n).width>mw&&l){L.push(l);l=d}else l=n});L.push(l);return L}
-function path(p){p.forEach(function(q,i){i?X.lineTo(q[0],q[1]):X.moveTo(q[0],q[1])})}
-function sym(x,y,s){var k=s/100;X.save();X.translate(x,y);X.scale(k,k);X.fillStyle=W;X.beginPath();path([[50,12],[88,88],[68,88],[50,50],[32,88],[12,88]]);X.fill();X.lineJoin=X.lineCap='round';X.beginPath();path([[20,68],[40,68],[47,54],[55,78],[60,68],[80,68]]);X.strokeStyle=K;X.lineWidth=10;X.stroke();X.strokeStyle=R;X.lineWidth=5;X.stroke();X.restore()}
-function lines(s){return s.split('\n').map(function(x){return x.trim()}).filter(Boolean)}
-function head(tag,sport,h){C.width=1080;C.height=h;Q(0,0,1080,h,K);sym(72,55,100);T('ARENA PULSE',190,105,38,W);
- var s='ARENA '+sport;F(24,500);var w=X.measureText(s).width+34;X.strokeStyle=R;X.lineWidth=3;X.strokeRect(1008-w,80,w,50);T(s,1008-w/2,105,24,W,'center',0,500);
- F(30);var tw=X.measureText(tag).width+56;Q(72,175,tw,60,R);T(tag,72+tw/2,205,30,W,'center')}
-function foot(y,src){if(src)T(src,72,y-50,22,G,'left',936,500);Q(72,y-20,936,6,R);T('FOLLOW ARENA PULSE',540,y+25,34,W,'center');T('EVERY SPORT. EVERY STORY.',540,y+63,22,G,'center',0,500)}
-function rowp(l,re){var m=l.match(re);return m}
-var bg=null,vb=null,vext='webm',photos=[],LT=0,L={hs:0,as:0,t:0,run:false};
-var D={
-'Match Day post':{f:[['comp','Competition','PREMIER LEAGUE'],['date','Date','SATURDAY 7 NOVEMBER'],['home','Home team','FULHAM'],['away','Away team','NEWCASTLE UNITED'],['time','Kick-off time','4:00 PM']],
- d:function(v){head('MATCH DAY','FOOTBALL',1350);CT(v.comp,72,310,64,936,W);T(v.date,72,375,30,G,'left',936,500);
-  Q(72,450,936,200,S);Q(72,450,14,200,R);TN(v.home,540,550,84,860,450,200);Q(72,790,936,200,S);Q(72,790,14,200,R);TN(v.away,540,890,84,860,790,200);
-  X.fillStyle=R;X.beginPath();X.arc(540,720,50,0,7);X.fill();T('VS',540,720,40,W,'center');
-  Q(72,1030,936,120,R);T(v.time,540,1092,86,W,'center');T('KICK-OFF  •  CET',540,1185,26,G,'center',0,500);foot(1280)}},
-'Match day list':{f:[['title','Title','MATCH DAY'],['date','Date','SATURDAY 7 NOVEMBER'],['rows','One match per line: TIME|HOME|AWAY|COMPETITION (up to 10)','1:30 PM|Leeds United|Tottenham|Premier League\n4:00 PM|Arsenal|Hull City|Premier League\n9:00 PM|Atletico Madrid|Bayern Munich|Champions League','area']],
- d:function(v){head('MATCH DAY','FOOTBALL',1920);T(v.title,72,300,46,W,'left',936);T(v.date,72,350,26,G,'left',936,500);
-  lines(v.rows).slice(0,10).forEach(function(l,i){var p=l.split('|'),y=430+i*134;Q(72,y,936,122,S);Q(72,y,200,122,R);T(p[0]||'',172,y+61,36,W,'center',180);var cl=LG('comps',p[3],300,y+6,32),hl=LG('clubs',p[1],300,y+36,44),al=LG('clubs',p[2],300,y+76,44);T((p[3]||'').toUpperCase(),300+(cl?42:0),y+22,22,R,'left',680);T((p[1]||'').toUpperCase(),300+(hl?56:0),y+58,32,W,'left',680-(hl?56:0));T((p[2]||'').toUpperCase(),300+(al?56:0),y+98,32,W,'left',680-(al?56:0))});foot(1825,'ALL TIMES: CET')}},
-'Live scoreboard':{live:true,f:[['comp','Competition','PREMIER LEAGUE'],['home','Home team','FULHAM'],['away','Away team','NEWCASTLE UNITED']],
- d:function(v){head('LIVE','FOOTBALL',1350);CT(v.comp,72,310,52,936,W);LG('clubs',v.home,210,405,120);LG('clubs',v.away,750,405,120);T(v.home.toUpperCase(),270,560,44,W,'center',400);T(v.away.toUpperCase(),810,560,44,W,'center',400);Q(410,440,260,240,R);T(v.hs+' - '+v.as,540,560,100,W,'center',240);
-  var m=Math.floor(v.t/60),c=(m<10?'0':'')+m+':'+(v.t%60<10?'0':'')+(v.t%60);T(c,540,790,90,R,'center');T('MATCH CLOCK',540,860,24,G,'center',0,500);foot(1290,'SCORES ENTERED BY ARENA PULSE')}},
-
-'Half time / Full time':{f:[['stage','Stage','FULL TIME'],['comp','Competition','CHAMPIONS LEAGUE'],['home','Home team','BARCELONA'],['away','Away team','ASTON VILLA'],['hs','Home score','3'],['as','Away score','0'],['hg','Home scorers (one per line)','Player name 12\u2019\nPlayer name 55\u2019','area'],['ag','Away scorers (one per line)','','area']],
- d:function(v){head(v.stage.toUpperCase(),'FOOTBALL',1350);CT(v.comp,72,310,52,936,W);
-  LG('clubs',v.home,210,405,120);LG('clubs',v.away,750,405,120);T(v.home,270,560,44,W,'center',400);T(v.away,810,560,44,W,'center',400);Q(410,440,260,240,R);T(v.hs+' - '+v.as,540,560,100,W,'center',240);
-  Q(72,740,936,6,S);lines(v.hg).slice(0,6).forEach(function(l,i){T(l,72,790+i*52,30,W,'left',440,500)});lines(v.ag).slice(0,6).forEach(function(l,i){T(l,568,790+i*52,30,W,'left',440,500)});foot(1290,'SOURCE: ')}},
-'Results post':{f:[['title','Title','CHAMPIONS LEAGUE RESULTS'],['date','Date','TUESDAY 3 NOVEMBER'],['rows','One result per line (Team 2-1 Team)','Barcelona 3-0 Aston Villa\nAtletico Madrid 0-2 Bayern Munich\nVillarreal 0-6 Paris Saint-Germain\nManchester United 3-2 AS Roma','area']],
- d:function(v){head('FULL TIME','FOOTBALL',1350);T(v.title,72,300,50,W,'left',936);T(v.date,72,350,26,G,'left',936,500);
-  var L=lines(v.rows).slice(0,9),n=L.length||1,h=Math.min(86,(790/n)-8),y=395;
-  L.forEach(function(l){var m=l.match(/^(.*?)\s+(\d+)\s*[-–:]\s*(\d+)\s+(.*)$/)||[0,l,'-','-',''];Q(72,y,936,h,S);Q(72,y,12,h,R);
-   LG('clubs',m[1],84,y+6,h-12);LG('clubs',m[4],1008-12-(h-12),y+6,h-12);T(m[1].toUpperCase(),455,y+h/2,30,W,'right',290);T(m[4].toUpperCase(),625,y+h/2,30,W,'left',290);Q(475,y+8,130,h-16,R);T(m[2]+' - '+m[3],540,y+h/2,36,W,'center');y+=h+8});
-  foot(1290,'SOURCE: ')}},
-'Standings table':{f:[['title','Title','CHAMPIONS LEAGUE STANDINGS'],['sub','Subtitle','AFTER MATCHDAY 4'],['rows','Team W D L Pts (one per line, up to 18)','Paris Saint-Germain 3 0 0 9\nAston Villa 3 0 0 9\nLiverpool 3 0 0 9\nReal Madrid 3 0 0 9\nReal Betis 3 0 0 9\nVfB Stuttgart 2 1 0 7','area']],
- d:function(v){head('STANDINGS','FOOTBALL',1920);T(v.title,72,300,46,W,'left',936);T(v.sub,72,350,26,G,'left',936,500);
-  [[655,'W'],[730,'D'],[805,'L']].forEach(function(q){T(q[1],q[0],405,24,G,'center',0,500)});T('PTS',990,405,24,G,'right',0,500);
-  lines(v.rows).slice(0,18).forEach(function(l,i){var m=l.match(/^(.*?)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)$/)||[0,l,'','','',''],y=430+i*72;
-   Q(72,y,936,66,S);Q(72,y,70,66,R);T(String(i+1),107,y+33,34,W,'center');var lg=LG('clubs',m[1],152,y+6,54);T(m[1].toUpperCase(),lg?218:165,y+33,32,W,'left',lg?410:460);
-   [[655,2],[730,3],[805,4]].forEach(function(q){T(m[q[1]],q[0],y+33,30,G,'center',0,500)});T(m[5],985,y+33,36,W,'right')});foot(1825,'SOURCE: ')}},
-'Lineups':{f:[['title','Title','STARTING LINEUPS'],['home','Home team','FULHAM'],['away','Away team','NEWCASTLE UNITED'],['hform','Home formation','4-2-3-1'],['aform','Away formation','4-3-3'],['hl','Home XI (one per line: number name)','1 Goalkeeper\n2 Player\n3 Player\n4 Player\n5 Player\n6 Player\n7 Player\n8 Player\n9 Player\n10 Player\n11 Player','area'],['al','Away XI (one per line: number name)','1 Goalkeeper\n2 Player\n3 Player\n4 Player\n5 Player\n6 Player\n7 Player\n8 Player\n9 Player\n10 Player\n11 Player','area']],
- d:function(v){head('LINEUPS','FOOTBALL',1350);T(v.title,72,300,50,W,'left',936);
-  [[72,v.home,v.hform,v.hl],[550,v.away,v.aform,v.al]].forEach(function(c){var x=c[0];Q(x,350,458,70,R);var lg=LG('clubs',c[1],x+8,356,58);T(c[1].toUpperCase(),x+(lg?76:20),385,28,W,'left',lg?240:300);T(c[2],x+438,385,26,W,'right',0,500);
-   lines(c[3]).slice(0,11).forEach(function(l,i){var m=l.match(/^(\d+)\s+(.*)$/)||[0,String(i+1),l],y=432+i*62;Q(x,y,458,56,S);Q(x,y,56,56,R);T(m[1],x+28,y+28,26,W,'center');T(m[2].toUpperCase(),x+74,y+28,26,W,'left',370)})});foot(1290,'SOURCE: ')}},
-'News post':{f:[['sport','Sport','FOOTBALL'],['head','Headline','CAF AWARDS 2026: 10 NOMINEES FOR PLAYER OF THE YEAR'],['body','Short text','The shortlist is out. Who deserves to win?'],['src','Source','SOURCE: order-radius:8px;padding:10px;font:inherit;font-size:15px;margin:4px 0 8px"><label>OR UPLOAD LOGO</label><input type="file" accept="image/*" id="ncf"><button class="big" id="nca">Add</button></div>
-<div class="card"><label>IMPORT MANY LOGOS: one per line as  Name | logo link</label><textarea id="lbulk" rows="5" placeholder="Arsenal | https://example.com/arsenal.png"></textarea><button class="big" id="lbb">Import logo links</button></div>
-<p class="n" id="ln"></p>
-</section>
 <script>
 var K='#0B0B0D',R='#E53935',W='#fff',G='#A7A7A7',S='#24252B';
 var C=document.getElementById('c'),PX=C.getContext('2d'),X=PX,VC=document.getElementById('vc'),VX=VC.getContext('2d');
@@ -469,9 +440,19 @@ $('vgen').onclick=function(){if(!window.MediaRecorder){vnote('Video recording is
  ready().then(function(){var au=audio(true),st=VC.captureStream(30);if(au&&au.track)st.addTrack(au.track);var ch=[],r=new MediaRecorder(st,{mimeType:mt,videoBitsPerSecond:4000000});r.ondataavailable=function(e){if(e.data&&e.data.size)ch.push(e.data)};
   r.onstop=function(){var y=mt.split(';')[0],b=new Blob(ch,{type:y});vout={b:b,n:'arena-pulse-'+VP+'.'+(y.indexOf('mp4')>0?'mp4':'webm')};$('vv').src=URL.createObjectURL(b);$('vv').hidden=false;$('vsv').hidden=false;$('vgen').disabled=false;vnote('Done. Tap Save video.');if(au)try{au.ac.close()}catch(e){}};
   r.start();vrun(function(){r.stop()},au)})};
-function showTab(n){['p','v','l'].forEach(function(k){$('t'+k).className=k==n?'':'g'});$('sp').hidden=n!='p';$('sv2').hidden=n!='v';$('sl2').hidden=n!='l';document.body.classList.toggle('wide',n=='v');if(n=='v')vsize();if(n=='l')buildLib()}
+function showTab(n){['p','v','l','live'].forEach(function(k){$('t'+k).className=k==n?'':'g'});$('sp').hidden=n!='p';$('sv2').hidden=n!='v';$('sl2').hidden=n!='l';$('slive').hidden=n!='live';document.body.classList.toggle('wide',n=='v'||n=='live');if(n=='v')vsize();if(n=='l')buildLib()}
 $('tp').onclick=function(){showTab('p')};$('tl').onclick=function(){showTab('l')};
 $('tv').onclick=function(){showTab('v')};
+$('tlive').onclick=function(){showTab('live')};
+
+// LIVE APPLY LOGIC
+$('live_apply').onclick = function() {
+  document.getElementById('pv_ticker').textContent = document.getElementById('live_ticker').value;
+  document.getElementById('pv_score').textContent = document.getElementById('live_home').value + ' ' + document.getElementById('live_score').value + ' ' + document.getElementById('live_away').value;
+  document.getElementById('pv_title').textContent = document.getElementById('live_title').value;
+  document.getElementById('pv_sub').textContent = document.getElementById('live_sub').value;
+};
+
 var LD={match:['MATCH DAY','TUESDAY 3 NOVEMBER','One match per line: TIME|HOME|AWAY|COMPETITION','6:45 PM|Shakhtar Donetsk|Sporting CP|Champions League\n6:45 PM|Galatasaray|VfB Stuttgart|Champions League\n9:00 PM|Atletico Madrid|Bayern Munich|Champions League\n9:00 PM|Barcelona|Aston Villa|Champions League\n9:00 PM|Villarreal|Paris Saint-Germain|Champions League'],
  results:['FULL TIME','TUESDAY 3 NOVEMBER','One result per line: Team 3-0 Team|COMPETITION (optional)','Villarreal 0-6 Paris Saint-Germain|Champions League\nAtletico Madrid 0-2 Bayern Munich|Champions League\nBarcelona 3-0 Aston Villa|Champions League\nManchester United 3-2 AS Roma|Champions League\nFeyenoord 0-3 Inter|Champions League\nLASK 4-0 Slovan Bratislava|Champions League'],
  lineups:['FULHAM V NEWCASTLE UNITED','4-2-3-1 | 4-3-3','One line per number: HOME NUMBER NAME | AWAY NUMBER NAME','1 Goalkeeper | 1 Goalkeeper\n2 Player | 2 Player\n3 Player | 3 Player\n4 Player | 4 Player\n5 Player | 5 Player\n6 Player | 6 Player\n7 Player | 7 Player\n8 Player | 8 Player\n9 Player | 9 Player\n10 Player | 10 Player\n11 Player | 11 Player'],
